@@ -6,8 +6,9 @@
 * Python
 
 ### Required Library
-* Beautiful Soup
-* pandas
+* Beautiful Soup [Crawler data from JHU dataset]
+* pandas [Data preprocess]
+* plotly [Data Visualization]
 
 
 
