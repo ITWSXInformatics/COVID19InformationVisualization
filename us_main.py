@@ -6,7 +6,6 @@ import state_code
 from state_code import SAMPLE
 import collections
 import plotly.graph_objects as go
-import numpy as np
 import plotly.express as px
 
 
