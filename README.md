@@ -15,7 +15,7 @@
 
 #### Data Resources
 
-The dataset was retrieved from CSSE at Johns Hopkins University [Github repo](https://github.com/joemccann/dillinger/blob/master/KUBERNETES.md)
+The dataset was retrieved from CSSE at Johns Hopkins University [Github repo](https://github.com/CSSEGISandData)
 
 
 
