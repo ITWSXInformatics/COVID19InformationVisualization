@@ -33,9 +33,11 @@ def set_color_group(item):
     
 
 entire =  pd.DataFrame(columns=['code','state','total_confirmed','color_code', 'date'])
+daily_total = []
 #output_df = []
 for i in files:
     #print(i)
+    daily = 0
     total = {}
     raw_df = pd.read_csv('./dataset/'+i).fillna(0)
     country = [col for col in raw_df.columns if 'Country' in col][0]
@@ -72,12 +74,14 @@ for i in files:
     for j in total:
         item = total[j][0]
         biggest_con = max(biggest_con, total[j][0])
+        daily += int(total[j][0])
         a_row = [state_code.CODE[j], j]+[str(int(item))]+[set_color_group(item)]+ [i[:10][:5]]
         leng = len(entire)
         entire.loc[leng] = a_row
         #usa_df.loc[leng] = a_row
         #row_df = pd.DataFrame([a_row])
         # usa_df = usa_df.append(a_row, ignore_index=True)
+    daily_total.append(daily)
     #print(usa_df)
     #output_df.append(usa_df.fillna(0))
 
@@ -86,9 +90,29 @@ entire['total_confirmed'] = pd.to_numeric(entire.total_confirmed, errors='coerce
 entire['color_code'] = pd.to_numeric(entire.color_code, errors='coerce')
 fig = px.choropleth(entire,  locations='code', scope='usa', color='color_code',range_color=[0,6], title= 'COVID-19 USA Data Visualization',
             color_continuous_scale = px.colors.sequential.Reds, locationmode="USA-states", hover_name='total_confirmed', animation_frame='date')
-fig.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 250
+fig.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 150
 fig.layout.coloraxis['colorbar'] = dict(
         title = {'text':'Poplulation'},
         tickvals=[1, 2, 3, 4, 5, 6],
         ticktext=["1000", "5000", "10000", "50000", "100000"]+[str(biggest_con)])
+
+for i, n in enumerate(daily_total):
+    fig.frames[i]['layout'] = go.Layout(
+            annotations=[
+                go.layout.Annotation(
+                    text='Total confirmed<br>' + '{:,}'.format(n) + ' cases',
+                    align='left',
+                    showarrow=False,
+                    xref='paper',
+                    yref='paper',
+                    x=0.6,
+                    y=0.0,
+                    bordercolor='black',
+                    borderwidth=1
+                    )
+                ],)
+    #fig.layout.sliders[0]['steps'][i]['args'][1]['title_text'] = fig.layout['sliders'][0]['steps'][i]['label'] + '. Today\'s total confirmed is '+ str(n)
+    #fig.layout.sliders[0]['steps'][i]['label'] += '. Today\'s total confirmed is '+ str(n)
+
+#fig.write_html('./demo/confirmed.html')
 fig.show()

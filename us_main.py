@@ -60,6 +60,9 @@ for i in files:
 entire["total_confirmed"] = pd.to_numeric(entire.total_confirmed, errors='coerce')
 entire["death"]= pd.to_numeric(entire.death, errors='coerce')
 #print(entire.dtypes)
-fig = px.choropleth(entire,  locations='code', scope='usa', color='hosp_rate',
-color_continuous_scale = px.colors.sequential.Reds, locationmode="USA-states", hover_name='hosp_rate', animation_frame='date')
+COLOR = px.colors.sequential.Peach
+COLUMN = 'hosp_rate'
+fig = px.choropleth(entire,  locations='code', scope='usa', color=COLUMN, title='COVID-19 US Data Visualization with '+COLUMN+' data', 
+color_continuous_scale = COLOR, locationmode="USA-states", hover_name=COLUMN, animation_frame='date')
+#fig.write_html('./demo/'+COLUMN+'.html')
 fig.show()
